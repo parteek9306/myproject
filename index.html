@@ -1,0 +1,2988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POWERFIT GYM - Transform Your Body</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            --secondary-gradient: linear-gradient(135deg, #e43717 0%, #ff6b35 100%);
+            --dark-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --accent-gradient: linear-gradient(135deg, #00d9ff 0%, #00ff88 100%);
+            --gold-gradient: linear-gradient(135deg, #f7931e 0%, #ffd700 100%);
+            --neon-glow: 0 0 20px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--dark-gradient);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 90%, rgba(255, 107, 53, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 10%, rgba(0, 217, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(247, 147, 30, 0.06) 0%, transparent 60%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            33% { transform: scale(1.05) rotate(1deg); }
+            66% { transform: scale(0.98) rotate(-1deg); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gradient);
+        }
+
+        /* ========== NAVBAR - FIXED OVERLAP ISSUE ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            flex-wrap: nowrap; /* Prevent wrapping */
+            min-height: 80px;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 5%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            min-height: 70px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: logoPulse 3s ease-in-out infinite;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.03); filter: brightness(1.2); }
+        }
+
+        .logo i {
+            font-size: 32px;
+            -webkit-text-fill-color: initial;
+            animation: dumbbellSpin 4s linear infinite;
+        }
+
+        @keyframes dumbbellSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex-shrink: 1;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+            white-space: nowrap;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* FIXED: Nav Buttons Container */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        /* Button Styles - Adjusted for Navbar */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6), var(--neon-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-primary);
+            transform: translateY(-3px);
+        }
+
+        .btn-accent {
+            background: var(--accent-gradient);
+            color: #0a0a0a;
+            box-shadow: 0 8px 25px rgba(0, 217, 255, 0.4);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(0, 217, 255, 0.6);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 30px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 24px;
+            background: rgba(255, 107, 53, 0.15);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ff6b35;
+            margin-bottom: 25px;
+            animation: badgeFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #fff 0%, #ff6b35 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.3)); }
+            to { filter: drop-shadow(0 0 40px rgba(255, 107, 53, 0.6)); }
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 50px;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-image {
+            position: relative;
+            animation: slideInRight 1s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(255, 107, 53, 0.3);
+            animation: imageFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes imageFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: floatBadge 4s ease-in-out infinite;
+        }
+
+        .floating-badge.badge-1 {
+            top: 30px;
+            right: -30px;
+            animation-delay: 0s;
+        }
+
+        .floating-badge.badge-2 {
+            bottom: 50px;
+            left: -30px;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .badge-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .badge-icon.orange {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            color: #ff6b35;
+        }
+
+        .badge-icon.cyan {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 255, 136, 0.2));
+            color: #00d9ff;
+        }
+
+        .badge-text h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .badge-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== SECTION STYLES ========== */
+        section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 70px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ========== ABOUT SECTION ========== */
+        .about {
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 53, 0.03) 50%, transparent 100%);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-img-main {
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            transition: transform 0.5s ease;
+        }
+
+        .about-img-main:hover {
+            transform: scale(1.02);
+        }
+
+        .about-img-main img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .experience-badge {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            background: var(--primary-gradient);
+            padding: 30px 35px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(255, 107, 53, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .experience-badge h3 {
+            font-size: 48px;
+            font-weight: 900;
+        }
+
+        .experience-badge p {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-content h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .about-content p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .features-list li:hover {
+            padding-left: 10px;
+            color: #ff6b35;
+        }
+
+        .features-list li i {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b35;
+            font-size: 16px;
+        }
+
+        /* ========== CLASSES SECTION - EXPANDED TO 8+ CLASSES ========== */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+        }
+
+        .class-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .class-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(255, 107, 53, 0.3);
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .class-image {
+            position: relative;
+            height: 260px;
+            overflow: hidden;
+        }
+
+        .class-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .class-card:hover .class-image img {
+            transform: scale(1.15);
+        }
+
+        .class-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.85) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 25px;
+        }
+
+        .class-card:hover .class-overlay {
+            opacity: 1;
+        }
+
+        .class-tag {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            background: var(--primary-gradient);
+            padding: 7px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            z-index: 2;
+            letter-spacing: 0.5px;
+        }
+
+        .class-content {
+            padding: 25px;
+        }
+
+        .class-meta {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .class-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .class-meta-item i {
+            color: #ff6b35;
+            font-size: 12px;
+        }
+
+        .class-content h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .class-card:hover .class-content h3 {
+            color: #ff6b35;
+        }
+
+        .class-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 18px;
+            line-height: 1.7;
+        }
+
+        .class-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .instructor-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructor-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ff6b35;
+        }
+
+        .instructor-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .instructor-role {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== TRAINERS SECTION ========== */
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+
+        .trainer-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .trainer-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 60px rgba(255, 107, 53, 0.25);
+        }
+
+        .trainer-image {
+            position: relative;
+            height: 380px;
+            overflow: hidden;
+        }
+
+        .trainer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .trainer-card:hover .trainer-image img {
+            transform: scale(1.08);
+        }
+
+        .trainer-social {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .trainer-card:hover .trainer-social {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) rotate(360deg);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
+        }
+
+        .trainer-info {
+            padding: 28px;
+            text-align: center;
+        }
+
+        .trainer-info h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .trainer-specialty {
+            color: #ff6b35;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .trainer-stats {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .trainer-stat {
+            text-align: center;
+        }
+
+        .trainer-stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ff6b35;
+        }
+
+        .trainer-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== PRICING SECTION ========== */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 35px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 45px 35px;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .pricing-card:hover::before,
+        .pricing-card.featured::before {
+            transform: scaleX(1);
+        }
+
+        .pricing-card.featured {
+            border-color: rgba(255, 107, 53, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 25px 70px rgba(255, 107, 53, 0.3);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.07);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 25px;
+            right: -35px;
+            background: var(--gold-gradient);
+            color: #000;
+            padding: 8px 45px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transform: rotate(45deg);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pricing-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(247, 147, 30, 0.15));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #ff6b35;
+            transition: all 0.4s ease;
+        }
+
+        .pricing-card:hover .pricing-icon {
+            transform: rotateY(180deg);
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .pricing-plan {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pricing-price {
+            font-size: 56px;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .pricing-price span {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .pricing-period {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .pricing-features li:hover {
+            color: var(--text-primary);
+            padding-left: 8px;
+        }
+
+        .pricing-features li i {
+            color: #00ff88;
+            font-size: 16px;
+        }
+
+        .pricing-features li.disabled {
+            opacity: 0.4;
+        }
+
+        .pricing-features li.disabled i {
+            color: #ff4444;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* ========== TESTIMONIALS SECTION ========== */
+        .testimonials-slider {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 60px;
+            color: rgba(255, 107, 53, 0.2);
+            position: absolute;
+            top: 25px;
+            left: 35px;
+        }
+
+        .testimonial-stars {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .testimonial-stars i {
+            color: #ffd700;
+            font-size: 20px;
+            animation: starPulse 2s ease-in-out infinite;
+        }
+
+        .testimonial-stars i:nth-child(even) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .testimonial-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 35px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff6b35;
+        }
+
+        .author-info h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .slider-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-btn:hover {
+            background: var(--primary-gradient);
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        /* ========== CONTACT SECTION ========== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-info-cards {
+            display: grid;
+            gap: 25px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .info-card:hover {
+            transform: translateX(10px);
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.15);
+        }
+
+        .info-icon {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(247, 147, 30, 0.15));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #ff6b35;
+            flex-shrink: 0;
+            transition: all 0.4s ease;
+        }
+
+        .info-card:hover .info-icon {
+            background: var(--primary-gradient);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .info-content h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .info-content p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 45px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ========== CTA SECTION ========== */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 80px 5% 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary-gradient);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #ff6b35;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: #ff6b35;
+            padding-left: 8px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ========== MODAL STYLES ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: #1a1a2e;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8) translateY(50px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 30px 35px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 53, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #ff6b35;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 35px;
+        }
+
+        /* ========== TOAST NOTIFICATION ========== */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toast {
+            background: #1a1a2e;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #ff6b35;
+            border-radius: 12px;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 320px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: toastSlideIn 0.5s ease-out;
+            transform: translateX(400px);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast.success {
+            border-left-color: #00ff88;
+        }
+
+        .toast.error {
+            border-left-color: #ff4444;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast.success .toast-icon {
+            color: #00ff88;
+        }
+
+        .toast.error .toast-icon {
+            color: #ff4444;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .toast-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 48px;
+            }
+
+            .hero-subtitle {
+                margin: 0 auto 40px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-image {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .floating-badge.badge-1 {
+                right: 20px;
+            }
+
+            .floating-badge.badge-2 {
+                left: 20px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            /* Hide some nav links on tablet */
+            .nav-links {
+                gap: 18px;
+            }
+            
+            .nav-links a {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links,
+            .nav-buttons {
+                display: none !important;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .mobile-menu.active {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 38px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .classes-grid,
+            .trainers-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-content h2 {
+                font-size: 32px;
+            }
+
+            .testimonial-card {
+                padding: 30px;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Navbar - FIXED OVERLAP ISSUE -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-dumbbell"></i>
+            POWERFIT
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#classes">Classes</a></li>
+            <li><a href="#trainers">Trainers</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="openModal('loginModal')">Login</button>
+            <button class="btn btn-primary" onclick="openModal('signupModal')">
+                <i class="fas fa-rocket"></i> Join Now
+            </button>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" style="
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        max-width: 350px;
+        height: 100vh;
+        background: rgba(26, 26, 46, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 999;
+        padding: 100px 30px 30px;
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    ">
+        <ul class="nav-links" style="flex-direction: column; gap: 0;">
+            <li><a href="#home" onclick="closeMobileMenu()" style="display: block; padding: 18px 0; border-bottom: 1px solid var(--border-color);">Home</a></li>
+            <li><a href="#about" onclick="closeMobileMenu()" style="display: block; padding: 18px 0; border-bottom: 1px solid var(--border-color);">About</a></li>
+            <li><a href="#classes" onclick="closeMobileMenu()" style="display: block; padding: 18px 0; border-bottom: 1px solid var(--border-color);">Classes</a></li>
+            <li><a href="#trainers" onclick="closeMobileMenu()" style="display: block; padding: 18px 0; border-bottom: 1px solid var(--border-color);">Trainers</a></li>
+            <li><a href="#pricing" onclick="closeMobileMenu()" style="display: block; padding: 18px 0; border-bottom: 1px solid var(--border-color);">Pricing</a></li>
+            <li><a href="#testimonials" onclick="closeMobileMenu()" style="display: block; padding: 18px 0; border-bottom: 1px solid var(--border-color);">Reviews</a></li>
+            <li><a href="#contact" onclick="closeMobileMenu()" style="display: block; padding: 18px 0;">Contact</a></li>
+        </ul>
+        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
+            <button class="btn btn-secondary" onclick="openModal('loginModal'); closeMobileMenu();">Login</button>
+            <button class="btn btn-primary" onclick="openModal('signupModal'); closeMobileMenu();">Join Now</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <i class="fas fa-fire"></i> #1 Rated Gym in India
+                </div>
+                <h1 class="hero-title">Transform Your Body & Mind</h1>
+                <p class="hero-subtitle">
+                    Join the ultimate fitness experience with world-class trainers, 
+                    state-of-the-art equipment, and a community that pushes you to be your best.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('classes')">
+                        <i class="fas fa-play-circle"></i> Start Journey
+                    </button>
+                    <button class="btn btn-secondary" onclick="playVideo()">
+                        <i class="fas fa-video"></i> Watch Video
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="15000">0</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="50">0</div>
+                        <div class="stat-label">Expert Trainers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="25">0</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <div class="hero-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=700&fit=crop" alt="Gym Workout">
+                    
+                    <div class="floating-badge badge-1">
+                        <div class="badge-icon orange">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="badge-text">
+                            <h4>Award Winning</h4>
+                            <p>Best Gym 2024</p>
+                        </div>
+                    </div>
+
+                    <div class="floating-badge badge-2">
+                        <div class="badge-icon cyan">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="badge-text">
+                            <h4>15K+ Members</h4>
+                            <p>Join Community</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-grid">
+            <div class="about-image">
+                <div class="about-img-main">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=550&h=650&fit=crop" alt="About Gym">
+                </div>
+                <div class="experience-badge">
+                    <h3>25+</h3>
+                    <p>Years of Excellence</p>
+                </div>
+            </div>
+
+            <div class="about-content">
+                <div class="section-badge">About Us</div>
+                <h2>Welcome to PowerFit Gym</h2>
+                <p>
+                    We're not just a gym – we're a fitness revolution. Since 1999, we've been helping 
+                    people across India transform their lives through dedication, expertise, and cutting-edge training methods.
+                </p>
+                <p>
+                    Our state-of-the-art facility spans over 50,000 square feet of premium equipment, 
+                    dedicated training zones, and wellness amenities designed for serious athletes and beginners alike.
+                </p>
+
+                <ul class="features-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Certified & Experienced Personal Trainers</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Modern Equipment & Latest Technology</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Nutrition Counseling & Diet Plans</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Flexible Membership Plans for Everyone</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Group Classes & Personal Training Options</span>
+                    </li>
+                </ul>
+
+                <button class="btn btn-primary" onclick="scrollToSection('classes')">
+                    <i class="fas fa-arrow-right"></i> Explore Programs
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes Section - NOW WITH 8+ CLASSES! -->
+    <section id="classes">
+        <div class="section-header">
+            <div class="section-badge">Our Programs</div>
+            <h2 class="section-title">Fitness Classes That Work</h2>
+            <p class="section-subtitle">
+                Choose from our wide range of expertly designed classes led by certified instructors who are passionate about your success.
+            </p>
+        </div>
+
+        <div class="classes-grid">
+            <!-- CLASS 1: Strength Training -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=280&fit=crop" alt="Strength Training">
+                    <span class="class-tag">Popular</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('Strength Training')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>60 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>Advanced</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>800 Cal</span></div>
+                    </div>
+                    <h3>Strength Training</h3>
+                    <p>Build muscle, increase strength, and transform your physique with our comprehensive weight training program.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Rajesh Kumar</div>
+                                <div class="instructor-role">Head Trainer</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('strength')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 2: HIIT Cardio Blast -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=280&fit=crop" alt="HIIT Workout">
+                    <span class="class-tag" style="background: var(--accent-gradient); color: #000;">New</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('HIIT Cardio')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>45 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>All Levels</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>650 Cal</span></div>
+                    </div>
+                    <h3>HIIT Cardio Blast</h3>
+                    <p>High-intensity interval training designed to maximize calorie burn and boost metabolism.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Priya Sharma</div>
+                                <div class="instructor-role">Cardio Expert</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('hiit')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 3: Yoga Flow Session -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=400&h=280&fit=crop" alt="Yoga Class">
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('Yoga Flow')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>75 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>Beginner</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>300 Cal</span></div>
+                    </div>
+                    <h3>Yoga Flow Session</h3>
+                    <p>Find balance, flexibility, and inner peace through our guided yoga and meditation sessions.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Anita Desai</div>
+                                <div class="instructor-role">Yoga Instructor</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('yoga')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 4: CrossFit Training (NEW!) -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=280&fit=crop" alt="CrossFit Training">
+                    <span class="class-tag" style="background: linear-gradient(135deg, #e43717, #ff6b35);">Trending</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('CrossFit')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>55 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>Intermediate</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>750 Cal</span></div>
+                    </div>
+                    <h3>CrossFit Training</h3>
+                    <p>Functional fitness combining weightlifting, gymnastics, and cardio for total body conditioning.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Arjun Singh</div>
+                                <div class="instructor-role">CrossFit Coach</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('crossfit')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 5: Zumba Dance Fitness (NEW!) -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=280&fit=crop" alt="Zumba Dance">
+                    <span class="class-tag" style="background: linear-gradient(135deg, #ff0080, #ff8c00);">Fun</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('Zumba Dance')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>50 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>All Levels</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>550 Cal</span></div>
+                    </div>
+                    <h3>Zumba Dance Fitness</h3>
+                    <p>Dance your way to fitness with high-energy Latin-inspired moves that feel like a party!</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Neha Gupta</div>
+                                <div class="instructor-role">Zumba Instructor</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('zumba')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 6: Boxing & Kickboxing (NEW!) -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=400&h=280&fit=crop" alt="Boxing Class">
+                    <span class="class-tag" style="background: linear-gradient(135deg, #dc143c, #ff4500);">Intense</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('Boxing')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>60 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>Intermediate</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>900 Cal</span></div>
+                    </div>
+                    <h3>Boxing & Kickboxing</h3>
+                    <p>Learn self-defense while getting an incredible full-body workout with professional techniques.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Vikram Rathore</div>
+                                <div class="instructor-role">Boxing Coach</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('boxing')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 7: Spinning/Cycling Class (NEW!) -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=400&h=280&fit=crop" alt="Spinning Class">
+                    <span class="class-tag" style="background: linear-gradient(135deg, #00bfff, #1e90ff);">Cardio</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('Spinning')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>45 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>All Levels</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>700 Cal</span></div>
+                    </div>
+                    <h3>Spinning / Indoor Cycling</h3>
+                    <p>Ride to the rhythm in our high-energy cycling studio with motivating music and lighting effects.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Kavita Nair</div>
+                                <div class="instructor-role">Cycling Coach</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('spinning')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLASS 8: Martial Arts / Self Defense (NEW!) -->
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1555597673-b21d5c9d1d68?w=400&h=280&fit=crop" alt="Martial Arts">
+                    <span class="class-tag" style="background: linear-gradient(135deg, #4b0082, #8b008b);">Special</span>
+                    <div class="class-overlay">
+                        <button class="btn btn-primary" onclick="bookClass('Martial Arts')">Book Now</button>
+                    </div>
+                </div>
+                <div class="class-content">
+                    <div class="class-meta">
+                        <div class="class-meta-item"><i class="fas fa-clock"></i><span>60 Min</span></div>
+                        <div class="class-meta-item"><i class="fas fa-signal"></i><span>Beginner</span></div>
+                        <div class="class-meta-item"><i class="fas fa-fire"></i><span>500 Cal</span></div>
+                    </div>
+                    <h3>Martial Arts & Self Defense</h3>
+                    <p>Learn practical self-defense techniques combining Karate, Krav Maga, and traditional martial arts.</p>
+                    <div class="class-footer">
+                        <div class="instructor-info">
+                            <img src="https://randomuser.me/api/portraits/men/72.jpg" alt="Trainer" class="instructor-avatar">
+                            <div>
+                                <div class="instructor-name">Sanjay Gupta</div>
+                                <div class="instructor-role">Martial Arts Expert</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 10px 18px; font-size: 11px;" onclick="showClassDetails('martialarts')">Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainers Section -->
+    <section id="trainers" style="background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 53, 0.03) 50%, transparent 100%);">
+        <div class="section-header">
+            <div class="section-badge">Expert Team</div>
+            <h2 class="section-title">Meet Our Trainers</h2>
+            <p class="section-subtitle">
+                Our certified trainers bring years of experience and passion to help you achieve your fitness goals.
+            </p>
+        </div>
+
+        <div class="trainers-grid">
+            <div class="trainer-card">
+                <div class="trainer-image">
+                    <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=350&h=450&fit=crop" alt="Trainer Rajesh">
+                    <div class="trainer-social">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Rajesh Kumar</h3>
+                    <div class="trainer-specialty">Strength & Conditioning Coach</div>
+                    <div class="trainer-stats">
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">12+</div>
+                            <div class="trainer-stat-label">Years Exp</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">500+</div>
+                            <div class="trainer-stat-label">Clients</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">98%</div>
+                            <div class="trainer-stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trainer-card">
+                <div class="trainer-image">
+                    <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=350&h=450&fit=crop" alt="Trainer Priya">
+                    <div class="trainer-social">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Priya Sharma</h3>
+                    <div class="trainer-specialty">Cardio & HIIT Specialist</div>
+                    <div class="trainer-stats">
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">8+</div>
+                            <div class="trainer-stat-label">Years Exp</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">350+</div>
+                            <div class="trainer-stat-label">Clients</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">99%</div>
+                            <div class="trainer-stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trainer-card">
+                <div class="trainer-image">
+                    <img src="https://images.unsplash.com/photo-1609899532139-03ae92b9dfdb?w=350&h=450&fit=crop" alt="Trainer Anita">
+                    <div class="trainer-social">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Anita Desai</h3>
+                    <div class="trainer-specialty">Yoga & Wellness Expert</div>
+                    <div class="trainer-stats">
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">10+</div>
+                            <div class="trainer-stat-label">Years Exp</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">420+</div>
+                            <div class="trainer-stat-label">Clients</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">97%</div>
+                            <div class="trainer-stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trainer-card">
+                <div class="trainer-image">
+                    <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=350&h=450&fit=crop" alt="Trainer Arjun">
+                    <div class="trainer-social">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div class="trainer-info">
+                    <h3>Arjun Singh</h3>
+                    <div class="trainer-specialty">CrossFit & Functional Training</div>
+                    <div class="trainer-stats">
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">15+</div>
+                            <div class="trainer-stat-label">Years Exp</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">600+</div>
+                            <div class="trainer-stat-label">Clients</div>
+                        </div>
+                        <div class="trainer-stat">
+                            <div class="trainer-stat-value">96%</div>
+                            <div class="trainer-stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="section-header">
+            <div class="section-badge">Membership Plans</div>
+            <h2 class="section-title">Choose Your Plan</h2>
+            <p class="section-subtitle">
+                Flexible membership options designed to fit your lifestyle and fitness goals.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-icon">
+                        <i class="fas fa-walking"></i>
+                    </div>
+                    <h3 class="pricing-plan">Basic Plan</h3>
+                    <div class="pricing-price">₹2,499<span>/month</span></div>
+                    <p class="pricing-period">Perfect for beginners</p>
+                </div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Gym Access (6AM - 10PM)</li>
+                    <li><i class="fas fa-check"></i> Basic Equipment Usage</li>
+                    <li><i class="fas fa-check"></i> Locker Room Access</li>
+                    <li><i class="fas fa-check"></i> Free WiFi</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Group Classes</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Personal Training</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Nutrition Plan</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="selectPlan('Basic', 2499)">Get Started</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="popular-badge">Most Popular</div>
+                <div class="pricing-header">
+                    <div class="pricing-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3 class="pricing-plan">Pro Plan</h3>
+                    <div class="pricing-price">₹4,999<span>/month</span></div>
+                    <p class="pricing-period">Best value for regulars</p>
+                </div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> 24/7 Gym Access</li>
+                    <li><i class="fas fa-check"></i> All Equipment + Premium Zones</li>
+                    <li><i class="fas fa-check"></i> Locker Room + Towel Service</li>
+                    <li><i class="fas fa-check"></i> Free WiFi + Parking</li>
+                    <li><i class="fas fa-check"></i> Unlimited Group Classes</li>
+                    <li><i class="fas fa-check"></i> 2 PT Sessions/Month</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Nutrition Plan</li>
+                </ul>
+                <button class="btn btn-primary" onclick="selectPlan('Pro', 4999)">Get Started</button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="pricing-plan">Elite Plan</h3>
+                    <div class="pricing-price">₹7,999<span>/month</span></div>
+                    <p class="pricing-period">For serious athletes</p>
+                </div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> 24/7 VIP Gym Access</li>
+                    <li><i class="fas fa-check"></i> All Equipment + Exclusive Areas</li>
+                    <li><i class="fas fa-check"></i> Premium Locker + Spa Access</li>
+                    <li><i class="fas fa-check"></i> All Amenities Included</li>
+                    <li><i class="fas fa-check"></i> Unlimited Classes + PT</li>
+                    <li><i class="fas fa-check"></i> Custom Nutrition Plan</li>
+                    <li><i class="fas fa-check"></i> Monthly Progress Tracking</li>
+                </ul>
+                <button class="btn btn-accent" onclick="selectPlan('Elite', 7999)">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" style="background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 53, 0.03) 50%, transparent 100%);">
+        <div class="section-header">
+            <div class="section-badge">Testimonials</div>
+            <h2 class="section-title">What Our Members Say</h2>
+            <p class="section-subtitle">
+                Real stories from real people who transformed their lives at PowerFit.
+            </p>
+        </div>
+
+        <div class="testimonials-slider">
+            <div class="testimonial-card" id="testimonialCard">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text" id="testimonialText">
+                    "PowerFit completely changed my life! I lost 23 kg in 6 months and gained confidence I never knew I had. The trainers here are incredibly supportive – especially Rajesh Sir who pushed me beyond my limits every single day!"
+                </p>
+                <div class="testimonial-author">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Member" class="author-avatar" id="authorAvatar">
+                    <div class="author-info">
+                        <h4 id="authorName">Priyanka Patel</h4>
+                        <p id="authorRole">Lost 23 kg in 6 months • Mumbai</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-controls">
+                <button class="slider-btn" onclick="prevTestimonial()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button class="slider-btn" onclick="nextTestimonial()">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="section-header">
+            <div class="section-badge">Get In Touch</div>
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">
+                Have questions? Ready to start your fitness journey? Reach out to us!
+            </p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info-cards">
+                <div class="info-card" onclick="callPhone()">
+                    <div class="info-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Call Us</h4>
+                        <p>+91 98765 43210</p>
+                    </div>
+                </div>
+
+                <div class="info-card" onclick="sendEmail()">
+                    <div class="info-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Email Us</h4>
+                        <p>info@powerfitgym.in</p>
+                    </div>
+                </div>
+
+                <div class="info-card" onclick="openMap()">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Location</h4>
+                        <p>123 MG Road, Bandra West, Mumbai 400050</p>
+                    </div>
+                </div>
+
+                <div class="info-card" onclick="showHours()">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Working Hours</h4>
+                        <p>Mon-Fri: 5AM - 11PM | Sat-Sun: 6AM - 9PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" class="form-control" placeholder="Rahul" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" class="form-control" placeholder="Sharma" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="rahul.sharma@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" class="form-control" required>
+                        <option value="">Select a topic...</option>
+                        <option value="membership">Membership Inquiry</option>
+                        <option value="training">Personal Training</option>
+                        <option value="classes">Class Information</option>
+                        <option value="general">General Question</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" class="form-control" placeholder="Tell us how we can help you..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Start Your Transformation?</h2>
+            <p>
+                Join thousands of members across India who have already transformed their lives. 
+                Your journey to a healthier, stronger you starts today!
+            </p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="openModal('signupModal')" style="font-size: 16px; padding: 18px 40px;">
+                    <i class="fas fa-rocket"></i> Join Now - Get 30% OFF
+                </button>
+                <button class="btn btn-secondary" onclick="scheduleTour()" style="font-size: 16px; padding: 18px 40px;">
+                    <i class="fas fa-calendar-alt"></i> Schedule Free Tour
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo" style="font-size: 28px;">
+                    <i class="fas fa-dumbbell"></i> POWERFIT
+                </a>
+                <p>
+                    Transforming lives through fitness since 1999. Join India's premier fitness community and start your journey to a healthier, stronger you today.
+                </p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#classes"><i class="fas fa-chevron-right"></i> Classes</a></li>
+                    <li><a href="#trainers"><i class="fas fa-chevron-right"></i> Trainers</a></li>
+                    <li><a href="#pricing"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Programs</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="showToast('Personal Training info coming soon!', 'success')"><i class="fas fa-chevron-right"></i> Personal Training</a></li>
+                    <li><a href="#" onclick="showToast('Group Classes info coming soon!', 'success')"><i class="fas fa-chevron-right"></i> Group Classes</a></li>
+                    <li><a href="#" onclick="showToast('Nutrition Plans info coming soon!', 'success')"><i class="fas fa-chevron-right"></i> Nutrition Plans</a></li>
+                    <li><a href="#" onclick="showToast('Online Coaching info coming soon!', 'success')"><i class="fas fa-chevron-right"></i> Online Coaching</a></li>
+                    <li><a href="#" onclick="showToast('Corporate Wellness info coming soon!', 'success')"><i class="fas fa-chevron-right"></i> Corporate Wellness</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Contact Info</h3>
+                <ul class="footer-links">
+                    <li><a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 98765 43210</a></li>
+                    <li><a href="mailto:info@powerfitgym.in"><i class="fas fa-envelope"></i> info@powerfitgym.in</a></li>
+                    <li><a href="#" onclick="openMap()"><i class="fas fa-map-marker-alt"></i> Mumbai, Maharashtra</a></li>
+                    <li><a href="#" onclick="showHours()"><i class="fas fa-clock"></i> Mon-Fri: 5AM - 11PM</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 PowerFit Gym India. All Rights Reserved. | Made with <i class="fas fa-heart" style="color: #ff6b35;"></i> in India 🇮🇳</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Welcome Back!</h3>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="#" style="color: #ff6b35; text-decoration: none;">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+                    Don't have an account? 
+                    <a href="#" onclick="switchModal('loginModal', 'signupModal')" style="color: #ff6b35; text-decoration: none; font-weight: 600;">Sign Up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Join PowerFit Today!</h3>
+                <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" placeholder="Rahul" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" placeholder="Sharma" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" placeholder="rahul.sharma@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" class="form-control" placeholder="+91 98765 43210">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" placeholder="Create password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Plan</label>
+                        <select class="form-control" required>
+                            <option value="">Choose a plan...</option>
+                            <option value="basic">Basic - ₹2,499/month</option>
+                            <option value="pro">Pro - ₹4,999/month (Recommended)</option>
+                            <option value="elite">Elite - ₹7,999/month</option>
+                        </select>
+                    </div>
+                    <label style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; cursor: pointer; font-size: 14px; color: var(--text-secondary);">
+                        <input type="checkbox" required style="margin-top: 4px;">
+                        I agree to the Terms of Service and Privacy Policy
+                    </label>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+                <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+                    Already have an account? 
+                    <a href="#" onclick="switchModal('signupModal', 'loginModal')" style="color: #ff6b35; text-decoration: none; font-weight: 600;">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== NAVBAR SCROLL EFFECT =====
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ===== MOBILE MENU =====
+        function toggleMobileMenu() {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            btn.classList.toggle('active');
+            
+            if (menu.style.left === '-100%' || menu.style.left === '') {
+                menu.style.left = '0';
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.style.left = '-100%';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenuBtn').classList.remove('active');
+            document.getElementById('mobileMenu').style.left = '-100%';
+            document.body.style.overflow = '';
+        }
+
+        // ===== SMOOTH SCROLL =====
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                showToast(`Navigated to ${sectionId} section`, 'success');
+            }
+        }
+
+        // ===== MODAL FUNCTIONS =====
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function switchModal(fromModal, toModal) {
+            closeModal(fromModal);
+            setTimeout(() => openModal(toModal), 300);
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // ===== TOAST NOTIFICATIONS =====
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            toast.innerHTML = `
+                <i class="fas fa-${icon} toast-icon"></i>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        // ===== FORM HANDLERS =====
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const email = document.getElementById('email').value;
+            
+            showToast(`Thank you ${firstName}! Your message has been sent successfully. We'll contact you soon! 🙏`, 'success');
+            event.target.reset();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            showToast('Login successful! Welcome back to PowerFit! 🏋️‍♂️', 'success');
+            closeModal('loginModal');
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            showToast('Account created successfully! Welcome to PowerFit family! 💪', 'success');
+            closeModal('signupModal');
+        }
+
+        // ===== CLASS BOOKING - UPDATED FOR ALL 8 CLASSES =====
+        function bookClass(className) {
+            showToast(`${className} class booked successfully! Check your email/SMS for confirmation. ✅`, 'success');
+        }
+
+        function showClassDetails(classType) {
+            const details = {
+                strength: 'Our Strength Training program focuses on compound movements, progressive overload, and proper form technique.',
+                hiit: 'HIIT Cardio combines high-intensity bursts with recovery periods for maximum fat burning.',
+                yoga: 'Yoga Flow improves flexibility, reduces stress, and enhances mind-body connection.',
+                crossfit: 'CrossFit combines functional movements performed at high intensity for complete body transformation.',
+                zumba: 'Zumba Dance Fitness uses Latin-inspired choreography to make exercise fun and effective.',
+                boxing: 'Boxing & Kickboxing teaches real self-defense skills while providing an intense cardiovascular workout.',
+                spinning: 'Indoor Cycling simulates road cycling with adjustable resistance and motivating group energy.',
+                martialarts: 'Martial Arts combines traditional techniques with modern self-defense for confidence and fitness.'
+            };
+            showToast(details[classType] || 'Class details loading...', 'success');
+        }
+
+        // ===== PLAN SELECTION =====
+        function selectPlan(planName, price) {
+            showToast(`You selected ${planName} Plan (₹${price.toLocaleString('en-IN')}/month). Redirecting to checkout...`, 'success');
+            setTimeout(() => openModal('signupModal'), 1500);
+        }
+
+        // ===== INDIAN TESTIMONIALS DATA =====
+        const testimonials = [
+            {
+                text: "PowerFit completely changed my life! I lost 23 kg in 6 months and gained confidence I never knew I had. The trainers here are incredibly supportive – especially Rajesh Sir who pushed me beyond my limits every single day!",
+                name: "Priyanka Patel",
+                role: "Lost 23 kg in 6 months • Mumbai",
+                avatar: "https://randomuser.me/api/portraits/women/65.jpg"
+            },
+            {
+                text: "As a software engineer sitting 12 hours a day, I had developed severe back pain and poor posture. PowerFit's functional training program not only fixed my posture but also gave me energy levels I haven't felt since college!",
+                name: "Amit Verma",
+                role: "Gained strength & fixed posture • Bangalore",
+                avatar: "https://randomuser.me/api/portraits/men/52.jpg"
+            },
+            {
+                text: "I was skeptical about joining a gym after multiple failed attempts. But PowerFit's community is different – it feels like family! The group classes are so much fun that I actually look forward to working out.",
+                name: "Sneha Reddy",
+                role: "Lost 15 kg • Hyderabad",
+                avatar: "https://randomuser.me/api/portraits/women/33.jpg"
+            },
+            {
+                text: "Being a busy mom of two, I thought I'd never get back in shape. Anita Ma'am designed a personalized program that fits around my schedule. In 8 months, I'm fitter than I was at 25!",
+                name: "Kavita Nair",
+                role: "Back in shape post-pregnancy • Delhi",
+                avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+            },
+            {
+                text: "I joined PowerFit before my wedding and the results were phenomenal! Everyone complimented my transformation. Highly recommend for brides-to-be!",
+                name: "Meera Iyer",
+                role: "Wedding transformation • Chennai",
+                avatar: "https://randomuser.me/api/portraits/women/68.jpg"
+            },
+            {
+                text: "After my heart surgery, doctors recommended light exercise. PowerFit's team worked with my cardiologist to design a safe recovery program. Grateful doesn't begin to describe it!",
+                name: "Sanjay Gupta",
+                role: "Post-surgery recovery • Kolkata",
+                avatar: "https://randomuser.me/api/portraits/men/72.jpg"
+            }
+        ];
+
+        let currentTestimonial = 0;
+
+        function updateTestimonial(index) {
+            const t = testimonials[index];
+            document.getElementById('testimonialText').textContent = `"${t.text}"`;
+            document.getElementById('authorName').textContent = t.name;
+            document.getElementById('authorRole').textContent = t.role;
+            document.getElementById('authorAvatar').src = t.avatar;
+        }
+
+        function nextTestimonial() {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            updateTestimonial(currentTestimonial);
+        }
+
+        function prevTestimonial() {
+            currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+            updateTestimonial(currentTestimonial);
+        }
+
+        // Auto-rotate testimonials
+        setInterval(nextTestimonial, 6000);
+
+        // ===== UTILITY FUNCTIONS =====
+        function playVideo() {
+            showToast('🎬 Video player would open here in production!', 'success');
+        }
+
+        function callPhone() {
+            showToast('📞 Calling +91 98765 43210...', 'success');
+        }
+
+        function sendEmail() {
+            showToast('✉️ Opening email client...', 'success');
+        }
+
+        function openMap() {
+            showToast('🗺️ Opening Google Maps location (Bandra West, Mumbai)...', 'success');
+        }
+
+        function showHours() {
+            showToast('🕐 Mon-Fri: 5AM-11PM | Sat-Sun: 6AM-9PM | Holidays: 7AM-8PM', 'success');
+        }
+
+        function scheduleTour() {
+            showToast('📅 Tour scheduling form opening... Please fill out contact form!', 'success');
+            scrollToSection('contact');
+        }
+
+        // ===== NUMBER COUNTER ANIMATION =====
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number[data-count]');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current).toLocaleString('en-IN') + '+';
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString('en-IN') + '+';
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+
+        // Trigger counter animation when hero is visible
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            observer.observe(heroSection);
+        }
+
+        // ===== SMOOTH SCROLL FOR NAV LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                closeMobileMenu();
+            });
+        });
+
+        // ===== BUTTON RIPPLE EFFECT =====
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: rippleEffect 0.6s ease-out;
+                    pointer-events: none;
+                `;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add ripple keyframe dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleEffect {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ===== PARALLAX EFFECT ON SCROLL =====
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero-image-wrapper, .floating-badge');
+            
+            parallaxElements.forEach(el => {
+                const speed = 0.3;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // ===== KEYBOARD ACCESSIBILITY =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+        });
+
+        console.log('%c💪 Welcome to PowerFit Gym India!', 'font-size: 24px; font-weight: bold; color: #ff6b35;');
+        console.log('%c🇮🇳 Made with love for fitness enthusiasts across India', 'font-size: 14px; color: #888;');
+    </script>
+</body>
+</html>

@@ -1,0 +1,2607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerFit Gym - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            --secondary-gradient: linear-gradient(135deg, #e43717 0%, #ff6b35 100%);
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --success: #00ff88;
+            --danger: #ff4444;
+            --warning: #ffd700;
+            --info: #00d9ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 90%, rgba(255, 107, 53, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 10%, rgba(0, 217, 255, 0.05) 0%, transparent 40%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* ========== LOGIN PAGE ========== */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .login-box {
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 50px 45px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 107, 53, 0.1);
+            animation: loginSlideIn 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes loginSlideIn {
+            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-logo-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-gradient);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 18px;
+            animation: logoFloat 3s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(5deg); }
+        }
+
+        .login-logo h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .login-logo p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 22px;
+        }
+
+        .login-form label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .input-group input:focus + i,
+        .input-group input:not(:placeholder-shown) + i {
+            color: #ff6b35;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 14px 18px 14px 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #ff6b35;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: #ff6b35;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-link:hover {
+            color: #f7931e;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-error {
+            background: rgba(255, 68, 68, 0.15);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: var(--danger);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .login-footer a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* ========== ADMIN DASHBOARD (Hidden until login) ========== */
+        .admin-wrapper {
+            display: none;
+        }
+
+        .admin-wrapper.active {
+            display: block;
+        }
+
+        /* Layout */
+        .admin-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            padding: 25px 18px;
+            position: fixed;
+            width: 260px;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text h2 {
+            font-size: 20px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px;
+            border-radius: 11px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::before,
+        .nav-link.active::before {
+            opacity: 1;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Search Box */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 11px 18px 11px 42px;
+            border-radius: 11px;
+            color: var(--text-primary);
+            width: 280px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Header Buttons */
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary-gradient);
+            transform: translateY(-3px);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 9px;
+            height: 9px;
+            background: var(--danger);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px 8px 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .user-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.15);
+            border-color: rgba(255, 107, 53, 0.2);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            color: #ff6b35;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 217, 255, 0.2));
+            color: #00ff88;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 136, 255, 0.2));
+            color: #00d9ff;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+            color: #ffd700;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 20px;
+        }
+
+        .trend-up {
+            color: var(--success);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .trend-down {
+            color: var(--danger);
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: #ff6b35;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: rgba(255, 107, 53, 0.03);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background: rgba(255, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .status-pending {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--warning);
+        }
+
+        .status-premium {
+            background: rgba(255, 107, 53, 0.15);
+            color: #ff6b35;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            padding: 7px 12px;
+            border: none;
+            background: rgba(255, 107, 53, 0.1);
+            color: #ff6b35;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.delete {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            padding: 11px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 11px 24px;
+            background: transparent;
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #ff6b35;
+        }
+
+        .btn-danger {
+            padding: 11px 24px;
+            background: linear-gradient(135deg, #dc143c, #ff4444);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(220, 20, 60, 0.4);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #151520;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 107, 53, 0.1);
+            border: none;
+            border-radius: 9px;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 28px;
+        }
+
+        .modal-footer {
+            padding: 20px 28px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 90px;
+            right: 25px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: #151520;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #ff6b35;
+            border-radius: 11px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 300px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            animation: toastSlide 0.4s ease;
+            transform: translateX(350px);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        @keyframes toastSlide {
+            from { opacity: 0; transform: translateX(350px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+
+        .toast-icon { font-size: 20px; }
+        .toast.success .toast-icon { color: var(--success); }
+        .toast.error .toast-icon { color: var(--danger); }
+
+        .toast-message { flex: 1; font-size: 13px; }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Charts Placeholder */
+        .chart-container {
+            height: 300px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.03), rgba(0, 217, 255, 0.03));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            width: 100%;
+            height: 80%;
+            padding: 20px;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .bar {
+            width: 45px;
+            background: var(--primary-gradient);
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .bar:hover {
+            filter: brightness(1.2);
+            transform: scaleY(1.05);
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* User Cell */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-cell-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid #ff6b35;
+        }
+
+        .user-cell-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-cell-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 99;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        /* Logout Button in Sidebar */
+        .logout-btn {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .logout-btn .nav-link {
+            color: var(--danger);
+        }
+
+        .logout-btn .nav-link:hover {
+            background: rgba(255, 68, 68, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-animation"></div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========== LOGIN PAGE ========== -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <div class="login-logo">
+                <div class="login-logo-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h1>POWERFIT</h1>
+                <p>Admin Panel Login</p>
+            </div>
+
+            <div class="login-error" id="loginError">
+                <i class="fas fa-exclamation-circle"></i> Invalid username or password!
+            </div>
+
+            <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-group">
+                        <input type="text" id="username" class="login-input" placeholder="Enter username" required autocomplete="off">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <input type="password" id="password" class="login-input" placeholder="Enter password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-link" onclick="showToast('Contact admin to reset password', 'error')">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>🔒 Secure Admin Access Only</p>
+                <p style="margin-top: 8px;">PowerFit Gym © 2024</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ADMIN DASHBOARD (Hidden by Default) ========== -->
+    <div class="admin-wrapper" id="adminDashboard">
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="admin-container">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h2>POWERFIT</h2>
+                        <span>ADMIN PANEL</span>
+                    </div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="showSection('dashboard')">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('members')">
+                            <i class="fas fa-users"></i>
+                            <span>Members</span>
+                            <span class="nav-badge">1,547</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('classes')">
+                            <i class="fas fa-dumbbell"></i>
+                            <span>Classes</span>
+                            <span class="nav-badge">8</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('trainers')">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Trainers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('bookings')">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Bookings</span>
+                            <span class="nav-badge">23</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('payments')">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('settings')">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Logout Button -->
+                    <li class="nav-item logout-btn">
+                        <a class="nav-link" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Header -->
+                <header class="header">
+                    <div class="header-left">
+                        <h1 id="pageTitle">Dashboard</h1>
+                        <p>Welcome back, <strong id="welcomeUser">Admin</strong>! Here's what's happening today.</p>
+                    </div>
+
+                    <div class="header-right">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search anything..." id="globalSearch">
+                        </div>
+
+                        <button class="icon-btn" title="Notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-dot"></span>
+                        </button>
+
+                        <button class="icon-btn" title="Messages">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+
+                        <div class="user-profile">
+                            <div class="user-avatar">AD</div>
+                            <div class="user-info">
+                                <h4>Admin User</h4>
+                                <p>Super Admin</p>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- DASHBOARD SECTION -->
+                <section id="dashboard" class="content-section active">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                                <div class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> +12%</div>
+                            </div>
+                            <div class="stat-value">1,547</div>
+                            <div class="stat-label">Total Members</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                                <div class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> +23%</div>
+                            </div>
+                            <div class="stat-value">₹12.8L</div>
+                            <div class="stat-label">Monthly Revenue</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                                <div class="stat-trend trend-down"><i class="fas fa-arrow-down"></i> -5%</div>
+                            </div>
+                            <div class="stat-value">342</div>
+                            <div class="stat-label">Active Bookings</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                                <div class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> +8%</div>
+                            </div>
+                            <div class="stat-value">4.8</div>
+                            <div class="stat-label">Avg Rating</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity & Chart -->
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 25px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-clock"></i> Recent Bookings</h3>
+                                <button class="btn-secondary" onclick="showSection('bookings')">View All</button>
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Member</th>
+                                            <th>Class</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentBookingsTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-chart-bar"></i> Revenue Overview</h3>
+                            </div>
+                            <div class="chart-container">
+                                <div class="bar-chart" id="revenueChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MEMBERS SECTION -->
+                <section id="members" class="content-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-users"></i> All Members</h3>
+                            <div style="display: flex; gap: 12px;">
+                                <div class="search-box" style="position: static;">
+                                    <input type="text" placeholder="Search members..." id="memberSearch" onkeyup="filterMembers()">
+                                </div>
+                                <button class="btn-primary" onclick="openModal('addMemberModal')">
+                                    <i class="fas fa-plus"></i> Add Member
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Member</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Plan</th>
+                                        <th>Status</th>
+                                        <th>Joined</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CLASSES SECTION -->
+                <section id="classes" class="content-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-dumbbell"></i> Manage Classes</h3>
+                            <button class="btn-primary" onclick="openModal('addClassModal')">
+                                <i class="fas fa-plus"></i> Add Class
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Class Name</th>
+                                        <th>Instructor</th>
+                                        <th>Duration</th>
+                                        <th>Level</th>
+                                        <th>Calories</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="classesTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TRAINERS SECTION -->
+                <section id="trainers" class="content-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-user-tie"></i> Trainers</h3>
+                            <button class="btn-primary" onclick="openModal('addTrainerModal')">
+                                <i class="fas fa-plus"></i> Add Trainer
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Trainer</th>
+                                        <th>Specialty</th>
+                                        <th>Experience</th>
+                                        <th>Clients</th>
+                                        <th>Rating</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="trainersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BOOKINGS SECTION -->
+                <section id="bookings" class="content-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-calendar-check"></i> Class Bookings</h3>
+                            <div style="display: flex; gap: 12px;">
+                                <select class="form-control" style="width: auto;" onchange="filterBookings(this.value)">
+                                    <option value="all">All Status</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                                <button class="btn-primary" onclick="openModal('addBookingModal')">
+                                    <i class="fas fa-plus"></i> New Booking
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Member</th>
+                                        <th>Class</th>
+                                        <th>Date & Time</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookingsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PAYMENTS SECTION -->
+                <section id="payments" class="content-section">
+                    <div class="stats-grid" style="margin-bottom: 25px;">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                            </div>
+                            <div class="stat-value">₹12.8L</div>
+                            <div class="stat-label">This Month</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            </div>
+                            <div class="stat-value">1,234</div>
+                            <div class="stat-label">Successful Payments</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            </div>
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            </div>
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Failed</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-history"></i> Payment History</h3>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Member</th>
+                                        <th>Amount</th>
+                                        <th>Plan</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SETTINGS SECTION -->
+                <section id="settings" class="content-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-cog"></i> Gym Settings</h3>
+                        </div>
+                        <form onsubmit="saveSettings(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Gym Name</label>
+                                    <input type="text" class="form-control" value="PowerFit Gym" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Email</label>
+                                    <input type="email" class="form-control" value="info@powerfitgym.in" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Contact Phone</label>
+                                    <input type="tel" class="form-control" value="+91 98765 43210" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" value="123 MG Road, Bandra West, Mumbai 400050">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Working Hours (Weekdays)</label>
+                                    <input type="text" class="form-control" value="5:00 AM - 11:00 PM">
+                                </div>
+                                <div class="form-group">
+                                    <label>Working Hours (Weekends)</label>
+                                    <input type="text" class="form-control" value="6:00 AM - 9:00 PM">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>About Gym</label>
+                                <textarea class="form-control" rows="4">India's premier fitness destination since 1999. Transform your body and mind with world-class facilities and expert trainers.</textarea>
+                            </div>
+
+                            <div style="margin-top: 25px;">
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Save Settings
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+
+    <!-- ADD MEMBER MODAL -->
+    <div class="modal-overlay" id="addMemberModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Add New Member</h3>
+                <button class="modal-close" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addMember(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" class="form-control" name="phone" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Membership Plan</label>
+                            <select class="form-control" name="plan" required>
+                                <option value="Basic">Basic - ₹2,499/month</option>
+                                <option value="Pro">Pro - ₹4,999/month</option>
+                                <option value="Elite">Elite - ₹7,999/month</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Add Member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT MEMBER MODAL -->
+    <div class="modal-overlay" id="editMemberModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Member</h3>
+                <button class="modal-close" onclick="closeModal('editMemberModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="updateMember(event)">
+                    <input type="hidden" name="editId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" name="editFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" name="editLastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" name="editEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" class="form-control" name="editPhone" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Membership Plan</label>
+                            <select class="form-control" name="editPlan" required>
+                                <option value="Basic">Basic - ₹2,499/month</option>
+                                <option value="Pro">Pro - ₹4,999/month</option>
+                                <option value="Elite">Elite - ₹7,999/month</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="editStatus" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('editMemberModal')">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update Member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD CLASS MODAL -->
+    <div class="modal-overlay" id="addClassModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-dumbbell"></i> Add New Class</h3>
+                <button class="modal-close" onclick="closeModal('addClassModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addClass(event)">
+                    <div class="form-group">
+                        <label>Class Name</label>
+                        <input type="text" class="form-control" name="className" required placeholder="e.g., Strength Training">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Instructor</label>
+                            <select class="form-control" name="instructor" required>
+                                <option>Rajesh Kumar</option>
+                                <option>Priya Sharma</option>
+                                <option>Anita Desai</option>
+                                <option>Arjun Singh</option>
+                                <option>Neha Gupta</option>
+                                <option>Vikram Rathore</option>
+                                <option>Kavita Nair</option>
+                                <option>Sanjay Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" class="form-control" name="duration" required placeholder="e.g., 60">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Difficulty Level</label>
+                            <select class="form-control" name="level" required>
+                                <option>Beginner</option>
+                                <option>Intermediate</option>
+                                <option>Advanced</option>
+                                <option>All Levels</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Calories Burn</label>
+                            <input type="number" class="form-control" name="calories" required placeholder="e.g., 500">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" name="description" rows="3" required placeholder="Describe this class..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('addClassModal')">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Add Class</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✨ EDIT CLASS MODAL (NEW!) -->
+    <div class="modal-overlay" id="editClassModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Class</h3>
+                <button class="modal-close" onclick="closeModal('editClassModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="updateClass(event)">
+                    <input type="hidden" name="editClassId">
+                    <div class="form-group">
+                        <label>Class Name</label>
+                        <input type="text" class="form-control" name="editClassName" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Instructor</label>
+                            <select class="form-control" name="editInstructor" required>
+                                <option>Rajesh Kumar</option>
+                                <option>Priya Sharma</option>
+                                <option>Anita Desai</option>
+                                <option>Arjun Singh</option>
+                                <option>Neha Gupta</option>
+                                <option>Vikram Rathore</option>
+                                <option>Kavita Nair</option>
+                                <option>Sanjay Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" class="form-control" name="editDuration" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Difficulty Level</label>
+                            <select class="form-control" name="editLevel" required>
+                                <option>Beginner</option>
+                                <option>Intermediate</option>
+                                <option>Advanced</option>
+                                <option>All Levels</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Calories Burn</label>
+                            <input type="number" class="form-control" name="editCalories" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" name="editDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="editStatus" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('editClassModal')">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update Class</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD TRAINER MODAL -->
+    <div class="modal-overlay" id="addTrainerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-tie"></i> Add New Trainer</h3>
+                <button class="modal-close" onclick="closeModal('addTrainerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addTrainer(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" class="form-control" name="trainerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Specialty</label>
+                            <input type="text" class="form-control" name="specialty" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Experience (years)</label>
+                            <input type="number" class="form-control" name="experience" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Clients</label>
+                            <input type="number" class="form-control" name="clients" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bio / About</label>
+                        <textarea class="form-control" name="bio" rows="3" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('addTrainerModal')">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Add Trainer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD BOOKING MODAL -->
+    <div class="modal-overlay" id="addBookingModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-plus"></i> New Booking</h3>
+                <button class="modal-close" onclick="closeModal('addBookingModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addBooking(event)">
+                    <div class="form-group">
+                        <label>Select Member</label>
+                        <select class="form-control" name="bookingMember" id="bookingMemberSelect" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Class</label>
+                        <select class="form-control" name="bookingClass" id="bookingClassSelect" required></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" name="bookingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time Slot</label>
+                            <select class="form-control" name="bookingTime" required>
+                                <option>6:00 AM - 7:00 AM</option>
+                                <option>7:00 AM - 8:00 AM</option>
+                                <option>8:00 AM - 9:00 AM</option>
+                                <option>5:00 PM - 6:00 PM</option>
+                                <option>6:00 PM - 7:00 PM</option>
+                                <option>7:00 PM - 8:00 PM</option>
+                                <option>8:00 PM - 9:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('addBookingModal')">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-check"></i> Confirm Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CREDENTIALS =====
+        const VALID_USERNAME = 'admin';
+        const VALID_PASSWORD = 'vrindachor';
+
+        // ===== DATA STORES =====
+        let members = [
+            { id: 1, firstName: 'Rahul', lastName: 'Sharma', email: 'rahul.sharma@email.com', phone: '+91 98765 43210', plan: 'Pro', status: 'active', joined: '2024-01-15' },
+            { id: 2, firstName: 'Priyanka', lastName: 'Patel', email: 'priyanka.p@email.com', phone: '+91 98765 43211', plan: 'Elite', status: 'active', joined: '2024-02-20' },
+            { id: 3, firstName: 'Amit', lastName: 'Verma', email: 'amit.verma@email.com', phone: '+91 98765 43212', plan: 'Basic', status: 'active', joined: '2024-03-10' },
+            { id: 4, firstName: 'Sneha', lastName: 'Reddy', email: 'sneha.reddy@email.com', phone: '+91 98765 43213', plan: 'Pro', status: 'inactive', joined: '2024-01-05' },
+            { id: 5, firstName: 'Kavita', lastName: 'Nair', email: 'kavita.nair@email.com', phone: '+91 98765 43214', plan: 'Elite', status: 'active', joined: '2024-04-18' },
+        ];
+
+        let classes = [
+            { id: 1, name: 'Strength Training', instructor: 'Rajesh Kumar', duration: 60, level: 'Advanced', calories: 800, status: 'active' },
+            { id: 2, name: 'HIIT Cardio Blast', instructor: 'Priya Sharma', duration: 45, level: 'All Levels', calories: 650, status: 'active' },
+            { id: 3, name: 'Yoga Flow Session', instructor: 'Anita Desai', duration: 75, level: 'Beginner', calories: 300, status: 'active' },
+            { id: 4, name: 'CrossFit Training', instructor: 'Arjun Singh', duration: 55, level: 'Intermediate', calories: 750, status: 'active' },
+            { id: 5, name: 'Zumba Dance Fitness', instructor: 'Neha Gupta', duration: 50, level: 'All Levels', calories: 550, status: 'active' },
+            { id: 6, name: 'Boxing & Kickboxing', instructor: 'Vikram Rathore', duration: 60, level: 'Intermediate', calories: 900, status: 'active' },
+            { id: 7, name: 'Spinning / Indoor Cycling', instructor: 'Kavita Nair', duration: 45, level: 'All Levels', calories: 700, status: 'active' },
+            { id: 8, name: 'Martial Arts & Self Defense', instructor: 'Sanjay Gupta', duration: 60, level: 'Beginner', calories: 500, status: 'inactive' },
+        ];
+
+        let trainers = [
+            { id: 1, name: 'Rajesh Kumar', specialty: 'Strength & Conditioning Coach', experience: 12, clients: 500, rating: 4.9, status: 'active' },
+            { id: 2, name: 'Priya Sharma', specialty: 'Cardio & HIIT Specialist', experience: 8, clients: 350, rating: 4.8, status: 'active' },
+            { id: 3, name: 'Anita Desai', specialty: 'Yoga & Wellness Expert', experience: 10, clients: 420, rating: 4.97, status: 'active' },
+            { id: 4, name: 'Arjun Singh', specialty: 'CrossFit & Functional Training', experience: 15, clients: 600, rating: 4.85, status: 'active' },
+        ];
+
+        let bookings = [
+            { id: 'BK001', member: 'Rahul Sharma', class: 'Strength Training', datetime: '2024-06-25 06:00 AM', status: 'confirmed' },
+            { id: 'BK002', member: 'Priyanka Patel', class: 'Yoga Flow Session', datetime: '2024-06-25 07:00 AM', status: 'pending' },
+            { id: 'BK003', member: 'Amit Verma', class: 'HIIT Cardio Blast', datetime: '2024-06-25 06:00 PM', status: 'confirmed' },
+            { id: 'BK004', member: 'Sneha Reddy', class: 'CrossFit Training', datetime: '2024-06-26 07:00 AM', status: 'cancelled' },
+            { id: 'BK005', member: 'Kavita Nair', class: 'Zumba Dance Fitness', datetime: '2024-06-26 06:00 PM', status: 'pending' },
+        ];
+
+        let payments = [
+            { id: 'TXN001', member: 'Rahul Sharma', amount: 4999, plan: 'Pro', date: '2024-06-01', status: 'success' },
+            { id: 'TXN002', member: 'Priyanka Patel', amount: 7999, plan: 'Elite', date: '2024-06-02', status: 'success' },
+            { id: 'TXN003', member: 'Amit Verma', amount: 2499, plan: 'Basic', date: '2024-06-03', status: 'success' },
+            { id: 'TXN004', member: 'Sneha Reddy', amount: 4999, plan: 'Pro', date: '2024-06-04', status: 'failed' },
+            { id: 'TXN005', member: 'Kavita Nair', amount: 7999, plan: 'Elite', date: '2024-06-05', status: 'pending' },
+        ];
+
+        // ===== LOGIN FUNCTIONALITY =====
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            // Validate credentials
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                // Clear error
+                errorDiv.classList.remove('show');
+                
+                // Check "Remember Me"
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', username);
+                } else {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                }
+                
+                // Show success message
+                showToast(`Welcome back, ${username}! 🎉`, 'success');
+                
+                // Small delay then show dashboard
+                setTimeout(() => {
+                    showDashboard();
+                }, 800);
+                
+            } else {
+                // Show error with animation
+                errorDiv.classList.add('show');
+                
+                // Shake the input fields
+                document.getElementById('username').style.borderColor = '#ff4444';
+                document.getElementById('password').style.borderColor = '#ff4444';
+                
+                setTimeout(() => {
+                    document.getElementById('username').style.borderColor = '';
+                    document.getElementById('password').style.borderColor = '';
+                }, 2000);
+                
+                // Clear password field
+                document.getElementById('password').value = '';
+                
+                showToast('Invalid credentials! Try again.', 'error');
+            }
+        }
+
+        function showDashboard() {
+            // Hide login page
+            document.getElementById('loginPage').style.display = 'none';
+            
+            // Show admin dashboard
+            document.getElementById('adminDashboard').classList.add('active');
+            
+            // Update welcome message
+            const savedUser = localStorage.getItem('username') || 'Admin';
+            document.getElementById('welcomeUser').textContent = savedUser.charAt(0).toUpperCase() + savedUser.slice(1);
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear session storage
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('username');
+                sessionStorage.removeItem('isLoggedIn');
+                
+                // Hide dashboard
+                document.getElementById('adminDashboard').classList.remove('active');
+                
+                // Show login page
+                document.getElementById('loginPage').style.display = 'flex';
+                
+                // Clear form
+                document.getElementById('loginForm').reset();
+                document.getElementById('loginError').classList.remove('show');
+                
+                showToast('Logged out successfully! 👋', 'success');
+            }
+        }
+
+        // Check if already logged in on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true') {
+                showDashboard();
+            }
+            
+            // Initialize tables
+            renderMembers();
+            renderClasses();
+            renderTrainers();
+            renderBookings();
+            renderPayments();
+            renderRecentBookings();
+            renderRevenueChart();
+        });
+
+        // ===== NAVIGATION =====
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.closest('.nav-link').classList.add('active');
+
+            const titles = {
+                'dashboard': 'Dashboard',
+                'members': 'Members Management',
+                'classes': 'Classes Management',
+                'trainers': 'Trainers Management',
+                'bookings': 'Bookings Management',
+                'payments': 'Payments & Revenue',
+                'settings': 'Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Dashboard';
+
+            if (window.innerWidth <= 1200) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // ===== TOAST NOTIFICATIONS =====
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            toast.innerHTML = `
+                <i class="fas fa-${icon} toast-icon"></i>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
+        }
+
+        // ===== MODAL FUNCTIONS =====
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            if (modalId === 'addBookingModal') populateBookingDropdowns();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('active');
+            });
+        });
+
+        // ===== RENDER FUNCTIONS =====
+        function renderMembers() {
+            const tbody = document.getElementById('membersTableBody');
+            tbody.innerHTML = members.map(m => `
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <img src="https://ui-avatars.com/api/?name=${m.firstName}+${m.lastName}&background=ff6b35&color=fff" alt="${m.firstName}" class="user-cell-img">
+                            <div class="user-cell-info">
+                                <h4>${m.firstName} ${m.lastName}</h4>
+                                <p>${m.email}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${m.email}</td>
+                    <td>${m.phone}</td>
+                    <td><span class="status-badge ${m.plan.toLowerCase() === 'elite' ? 'status-premium' : ''}">${m.plan}</span></td>
+                    <td><span class="status-badge status-${m.status}">${m.status}</span></td>
+                    <td>${m.joined}</td>
+                    <td>
+                        <button class="action-btn" onclick="editMember(${m.id})"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete" onclick="deleteMember(${m.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderClasses() {
+            const tbody = document.getElementById('classesTableBody');
+            tbody.innerHTML = classes.map(c => `
+                <tr>
+                    <td><strong>${c.name}</strong></td>
+                    <td>${c.instructor}</td>
+                    <td>${c.duration} min</td>
+                    <td>${c.level}</td>
+                    <td>${c.calories} cal</td>
+                    <td><span class="status-badge status-${c.status}">${c.status}</span></td>
+                    <td>
+                        <button class="action-btn" onclick="editClass(${c.id})"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete" onclick="deleteClass(${c.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderTrainers() {
+            const tbody = document.getElementById('trainersTableBody');
+            tbody.innerHTML = trainers.map(t => `
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <img src="https://ui-avatars.com/api/?name=${t.name.replace(' ', '+')}&background=00d9ff&color=fff" alt="${t.name}" class="user-cell-img">
+                            <div class="user-cell-info">
+                                <h4>${t.name}</h4>
+                                <p>${t.specialty}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${t.specialty}</td>
+                    <td>${t.experience} years</td>
+                    <td>${t.clients}+</td>
+                    <td><i class="fas fa-star" style="color: #ffd700;"></i> ${t.rating}</td>
+                    <td><span class="status-badge status-active">${t.status}</span></td>
+                    <td>
+                        <button class="action-btn" onclick="editTrainer(${t.id})"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete" onclick="deleteTrainer(${t.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderBookings(filter = 'all') {
+            const tbody = document.getElementById('bookingsTableBody');
+            let filtered = filter === 'all' ? bookings : bookings.filter(b => b.status === filter);
+            
+            tbody.innerHTML = filtered.map(b => `
+                <tr>
+                    <td><strong>${b.id}</strong></td>
+                    <td>${b.member}</td>
+                    <td>${b.class}</td>
+                    <td>${b.datetime}</td>
+                    <td><span class="status-badge status-${b.status === 'cancelled' ? 'inactive' : b.status}">${b.status}</span></td>
+                    <td>
+                        ${b.status !== 'completed' && b.status !== 'cancelled' ? `
+                            <button class="action-btn" onclick="confirmBooking('${b.id}')"><i class="fas fa-check"></i></button>
+                            <button class="action-btn delete" onclick="cancelBooking('${b.id}')"><i class="fas fa-times"></i></button>
+                        ` : '-'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPayments() {
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = payments.map(p => `
+                <tr>
+                    <td><strong>${p.id}</strong></td>
+                    <td>${p.member}</td>
+                    <td><strong>₹${p.amount.toLocaleString('en-IN')}</strong></td>
+                    <td>${p.plan}</td>
+                    <td>${p.date}</td>
+                    <td><span class="status-badge status-${p.status === 'success' ? 'active' : p.status === 'failed' ? 'inactive' : 'pending'}">${p.status}</span></td>
+                    <td>${p.status === 'pending' ? `<button class="action-btn" onclick="verifyPayment('${p.id}')"><i class="fas fa-check"></i> Verify</button>` : '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderRecentBookings() {
+            const tbody = document.getElementById('recentBookingsTable');
+            tbody.innerHTML = bookings.slice(0, 5).map(b => `
+                <tr>
+                    <td><strong>${b.member}</strong></td>
+                    <td>${b.class}</td>
+                    <td>${b.datetime.split(' ')[0]}</td>
+                    <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderRevenueChart() {
+            const chart = document.getElementById('revenueChart');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            const values = [65, 78, 52, 88, 72, 95];
+            
+            chart.innerHTML = months.map((m, i) => `
+                <div class="bar-group">
+                    <div class="bar" style="height: ${values[i]}%;" data-value="₹${(values[i] * 15000).toLocaleString('en-IN')}"></div>
+                    <span class="bar-label">${m}</span>
+                </div>
+            `).join('');
+        }
+
+        // ===== CRUD - MEMBERS =====
+        function addMember(e) {
+            e.preventDefault();
+            const form = e.target;
+            members.push({
+                id: members.length + 1,
+                firstName: form.firstName.value,
+                lastName: form.lastName.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                plan: form.plan.value,
+                status: form.status.value,
+                joined: new Date().toISOString().split('T')[0]
+            });
+            renderMembers();
+            closeModal('addMemberModal');
+            form.reset();
+            showToast(`Member ${form.firstName.value} added! ✅`);
+        }
+
+        function editMember(id) {
+            const m = members.find(x => x.id === id);
+            if (!m) return;
+
+            document.querySelector('[name="editId"]').value = id;
+            document.querySelector('[name="editFirstName"]').value = m.firstName;
+            document.querySelector('[name="editLastName"]').value = m.lastName;
+            document.querySelector('[name="editEmail"]').value = m.email;
+            document.querySelector('[name="editPhone"]').value = m.phone;
+            document.querySelector('[name="editPlan"]').value = m.plan;
+            document.querySelector('[name="editStatus"]').value = m.status;
+            openModal('editMemberModal');
+        }
+
+        function updateMember(e) {
+            e.preventDefault();
+            const form = e.target;
+            const id = parseInt(form.editId.value);
+            const idx = members.findIndex(m => m.id === id);
+
+            if (idx !== -1) {
+                members[idx] = { ...members[idx],
+                    firstName: form.editFirstName.value,
+                    lastName: form.editLastName.value,
+                    email: form.editEmail.value,
+                    phone: form.editPhone.value,
+                    plan: form.editPlan.value,
+                    status: form.editStatus.value
+                };
+                renderMembers();
+                closeModal('editMemberModal');
+                showToast('Member updated! ✅');
+            }
+        }
+
+        function deleteMember(id) {
+            if (confirm('Delete this member?')) {
+                members = members.filter(m => m.id !== id);
+                renderMembers();
+                showToast('Member deleted! 🗑️');
+            }
+        }
+
+        function filterMembers() {
+            const q = document.getElementById('memberSearch').value.toLowerCase();
+            const filtered = members.filter(m =>
+                m.firstName.toLowerCase().includes(q) ||
+                m.lastName.toLowerCase().includes(q) ||
+                m.email.toLowerCase().includes(q)
+            );
+            // Re-render with filtered data (simplified)
+            document.getElementById('membersTableBody').innerHTML = filtered.map(m => `
+                <tr>
+                    <td><div class="user-cell"><img src="https://ui-avatars.com/api/?name=${m.firstName}+${m.lastName}&background=ff6b35&color=fff" class="user-cell-img"><div class="user-cell-info"><h4>${m.firstName} ${m.lastName}</h4><p>${m.email}</p></div></div></td>
+                    <td>${m.email}</td><td>${m.phone}</td>
+                    <td><span class="status-badge ${m.plan==='elite'?'status-premium':''}">${m.plan}</span></td>
+                    <td><span class="status-badge status-${m.status}">${m.status}</span></td>
+                    <td>${m.joined}</td>
+                    <td><button class="action-btn" onclick="editMember(${m.id})"><i class="fas fa-edit"></i></button><button class="action-btn delete" onclick="deleteMember(${m.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+
+        // ===== CRUD - CLASSES =====
+        function addClass(e) {
+            e.preventDefault();
+            const f = e.target;
+            classes.push({
+                id: classes.length + 1,
+                name: f.className.value,
+                instructor: f.instructor.value,
+                duration: parseInt(f.duration.value),
+                level: f.level.value,
+                calories: parseInt(f.calories.value),
+                status: 'active'
+            });
+            renderClasses();
+            closeModal('addClassModal');
+            f.reset();
+            showToast(`Class "${f.className.value}" added! ✅`);
+        }
+
+        // ✨ EDIT CLASS FUNCTION (NEW!)
+        function editClass(id) {
+            const c = classes.find(x => x.id === id);
+            if (!c) return;
+
+            document.querySelector('[name="editClassId"]').value = id;
+            document.querySelector('[name="editClassName"]').value = c.name;
+            document.querySelector('[name="editInstructor"]').value = c.instructor;
+            document.querySelector('[name="editDuration"]').value = c.duration;
+            document.querySelector('[name="editLevel"]').value = c.level;
+            document.querySelector('[name="editCalories"]').value = c.calories;
+            document.querySelector('[name="editDescription"]').value = c.description || `${c.name} - ${c.level} level class`;
+            document.querySelector('[name="editStatus"]').value = c.status;
+            
+            openModal('editClassModal');
+        }
+
+        // ✨ UPDATE CLASS FUNCTION (NEW!)
+        function updateClass(e) {
+            e.preventDefault();
+            const f = e.target;
+            const id = parseInt(f.editClassId.value);
+            const idx = classes.findIndex(c => c.id === id);
+
+            if (idx !== -1) {
+                classes[idx] = {
+                    ...classes[idx],
+                    name: f.editClassName.value,
+                    instructor: f.editInstructor.value,
+                    duration: parseInt(f.editDuration.value),
+                    level: f.editLevel.value,
+                    calories: parseInt(f.editCalories.value),
+                    description: f.editDescription.value,
+                    status: f.editStatus.value
+                };
+                renderClasses();
+                closeModal('editClassModal');
+                showToast(`Class "${f.editClassName.value}" updated! ✅`);
+            }
+        }
+
+        function deleteClass(id) {
+            if (confirm('Delete this class?')) {
+                classes = classes.filter(c => c.id !== id);
+                renderClasses();
+                showToast('Class deleted! 🗑️');
+            }
+        }
+
+        // ===== CRUD - TRAINERS =====
+        function addTrainer(e) {
+            e.preventDefault();
+            const f = e.target;
+            trainers.push({
+                id: trainers.length + 1,
+                name: f.trainerName.value,
+                specialty: f.specialty.value,
+                experience: parseInt(f.experience.value),
+                clients: parseInt(f.clients.value),
+                rating: 4.5,
+                status: 'active'
+            });
+            renderTrainers();
+            closeModal('addTrainerModal');
+            f.reset();
+            showToast(`Trainer "${f.trainerName.value}" added! ✅`);
+        }
+
+        function editTrainer(id) {
+            alert(`Edit trainer ID: ${id}\n\nThis would open an edit modal.`);
+        }
+
+        function deleteTrainer(id) {
+            if (confirm('Remove this trainer?')) {
+                trainers = trainers.filter(t => t.id !== id);
+                renderTrainers();
+                showToast('Trainer removed! 🗑️');
+            }
+        }
+
+        // ===== CRUD - BOOKINGS =====
+        function populateBookingDropdowns() {
+            document.getElementById('bookingMemberSelect').innerHTML = 
+                members.map(m => `<option value="${m.firstName} ${m.lastName}">${m.firstName} ${m.lastName}</option>`).join('');
+            document.getElementById('bookingClassSelect').innerHTML = 
+                classes.filter(c => c.status === 'active').map(c => `<option value="${c.name}">${c.name} (${c.instructor})</option>`).join('');
+        }
+
+        function addBooking(e) {
+            e.preventDefault();
+            const f = e.target;
+            bookings.unshift({
+                id: `BK${String(bookings.length + 1).padStart(3, '0')}`,
+                member: f.bookingMember.value,
+                class: f.bookingClass.value.split(' (')[0],
+                datetime: `${f.bookingDate.value} ${f.bookingTime.value.split(' ')[0]}`,
+                status: 'pending'
+            });
+            renderBookings();
+            renderRecentBookings();
+            closeModal('addBookingModal');
+            f.reset();
+            showToast(`Booking created! ✅`);
+        }
+
+        function confirmBooking(id) {
+            const idx = bookings.findIndex(b => b.id === id);
+            if (idx !== -1) {
+                bookings[idx].status = 'confirmed';
+                renderBookings();
+                renderRecentBookings();
+                showToast(`Booking ${id} confirmed! ✅`);
+            }
+        }
+
+        function cancelBooking(id) {
+            if (confirm('Cancel this booking?')) {
+                const idx = bookings.findIndex(b => b.id === id);
+                if (idx !== -1) {
+                    bookings[idx].status = 'cancelled';
+                    renderBookings();
+                    renderRecentBookings();
+                    showToast(`Booking ${id} cancelled.`);
+                }
+            }
+        }
+
+        function filterBookings(status) {
+            renderBookings(status);
+        }
+
+        // ===== PAYMENTS =====
+        function verifyPayment(id) {
+            const idx = payments.findIndex(p => p.id === id);
+            if (idx !== -1) {
+                payments[idx].status = 'success';
+                renderPayments();
+                showToast(`Payment ${id} verified! ✅`);
+            }
+        }
+
+        // ===== SETTINGS =====
+        function saveSettings(e) {
+            e.preventDefault();
+            showToast('Settings saved! 💾');
+        }
+
+        console.log('%c💪 PowerFit Admin Panel v2.0', 'font-size: 24px; font-weight: bold; color: #ff6b35;');
+        console.log('%c🔐 Login: admin / vrindachor', 'font-size: 14px; color: #888;');
+    </script>
+</body>
+</html>
